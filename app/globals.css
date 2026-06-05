@@ -1,0 +1,248 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────────────────────
+   Дизайн-токены «Аль-Аббос»
+   Тёплый узбекский колорит: терракота (глина) + бирюза (плитка).
+   Все значения — здесь. В компонентах магических цветов нет.
+   ───────────────────────────────────────────────────────────── */
+
+@theme inline {
+  /* Шрифты (кириллица) */
+  --font-sans: var(--font-manrope);
+  --font-heading: var(--font-unbounded);
+  --font-display: var(--font-unbounded);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Базовые цвета (shadcn) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Второй бренд-акцент — бирюза */
+  --color-teal: var(--teal);
+  --color-teal-foreground: var(--teal-foreground);
+
+  /* Графики (аналитика) */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Боковое меню (админка) */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Радиусы */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.4);
+
+  /* Плавная анимация появления */
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ── Светлая тема ─────────────────────────────────────────── */
+:root {
+  --radius: 0.75rem;
+
+  --background: #fbf6ee; /* тёплый кремовый */
+  --foreground: #2b1d14; /* тёмно-коричневый текст */
+
+  --card: #fffdf9;
+  --card-foreground: #2b1d14;
+  --popover: #ffffff;
+  --popover-foreground: #2b1d14;
+
+  --primary: #ea580c; /* терракота */
+  --primary-foreground: #fff7ed;
+
+  --secondary: #f3e7d8; /* тёплый песок */
+  --secondary-foreground: #5a3e2b;
+
+  --muted: #f1e9dd;
+  --muted-foreground: #6e5a48;
+
+  --accent: #f6ddc9; /* мягкий ховер-фон */
+  --accent-foreground: #7c3a16;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --success: #15803d;
+  --success-foreground: #ffffff;
+
+  --border: #e9dac6;
+  --input: #e2d3bf;
+  --ring: #ea580c;
+
+  /* Бирюза — второй акцент */
+  --teal: #0d9488;
+  --teal-foreground: #ffffff;
+
+  --chart-1: #ea580c;
+  --chart-2: #0d9488;
+  --chart-3: #f59e0b;
+  --chart-4: #b45309;
+  --chart-5: #65a30d;
+
+  --sidebar: #fffdf9;
+  --sidebar-foreground: #2b1d14;
+  --sidebar-primary: #ea580c;
+  --sidebar-primary-foreground: #fff7ed;
+  --sidebar-accent: #f6ddc9;
+  --sidebar-accent-foreground: #7c3a16;
+  --sidebar-border: #e9dac6;
+  --sidebar-ring: #ea580c;
+}
+
+/* ── Тёмная тема ──────────────────────────────────────────── */
+.dark {
+  --background: #17110d; /* глубокий графит-коричневый */
+  --foreground: #f2e8dc;
+
+  --card: #211810;
+  --card-foreground: #f2e8dc;
+  --popover: #211810;
+  --popover-foreground: #f2e8dc;
+
+  --primary: #f2742e; /* терракота, чуть ярче — мягко светится */
+  --primary-foreground: #1a1209;
+
+  --secondary: #2c211a;
+  --secondary-foreground: #f2e8dc;
+
+  --muted: #2a201a;
+  --muted-foreground: #bda893;
+
+  --accent: #3a2a1d;
+  --accent-foreground: #fcd9bd;
+
+  --destructive: #f87171;
+  --destructive-foreground: #1a1209;
+
+  --success: #4ade80;
+  --success-foreground: #0a1f12;
+
+  --border: #34271f;
+  --input: #3a2c22;
+  --ring: #f2742e;
+
+  --teal: #19c4b0;
+  --teal-foreground: #03201b;
+
+  --chart-1: #f2742e;
+  --chart-2: #2dd4bf;
+  --chart-3: #fbbf24;
+  --chart-4: #fb923c;
+  --chart-5: #a3e635;
+
+  --sidebar: #1c140e;
+  --sidebar-foreground: #f2e8dc;
+  --sidebar-primary: #f2742e;
+  --sidebar-primary-foreground: #1a1209;
+  --sidebar-accent: #3a2a1d;
+  --sidebar-accent-foreground: #fcd9bd;
+  --sidebar-border: #34271f;
+  --sidebar-ring: #f2742e;
+}
+
+/* Семантические алиасы из спецификации (§14) — для справки/переиспользования */
+:root {
+  --bg: var(--background);
+  --surface: var(--card);
+  --text: var(--foreground);
+  --text-muted: var(--muted-foreground);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+/* Доступность: уважаем «уменьшить движение» (§16) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Тонкий восточный фон-паттерн (ненавязчивый) — утилита .pattern-east */
+.pattern-east {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--primary) 9%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Аккуратные полосы прокрутки */
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+  }
+}
