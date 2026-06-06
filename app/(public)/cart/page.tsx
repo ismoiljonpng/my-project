@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { PagePlaceholder } from "@/components/page-placeholder";
+import { CartView } from "@/components/cart/cart-view";
 
 export const metadata: Metadata = { title: "Корзина" };
 
 export default function CartPage() {
   return (
-    <PagePlaceholder
-      title="Корзина"
-      description="Корзина и оформление заказа появятся на этапе 4."
-    />
+    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+      <h1 className="mb-8 text-4xl font-extrabold tracking-tight sm:text-5xl">
+        Корзина
+      </h1>
+      <CartView />
+    </div>
   );
 }

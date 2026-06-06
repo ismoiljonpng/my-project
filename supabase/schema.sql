@@ -265,3 +265,67 @@ create trigger profiles_guard_privileges
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
 revoke execute on function public.set_updated_at() from public, anon, authenticated;
 revoke execute on function public.guard_profile_privileges() from public, anon, authenticated;
+
+-- Атомарное оформление заказа: считает сумму по актуальным ценам меню
+-- (клиентским ценам не доверяем) и создаёт заказ + позиции в одной транзакции.
+create or replace function public.place_order(
+  p_location_id uuid,
+  p_delivery_address text,
+  p_phone text,
+  p_comment text,
+  p_payment_method text,
+  p_items jsonb
+) returns uuid
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  v_order_id uuid;
+  v_total integer := 0;
+  v_item record;
+  v_qty integer;
+begin
+  if auth.uid() is null then
+    raise exception 'not_authenticated';
+  end if;
+
+  if p_payment_method is null or p_payment_method not in ('cash', 'card', 'online') then
+    p_payment_method := 'cash';
+  end if;
+
+  if length(btrim(coalesce(p_delivery_address, ''))) < 5 then
+    raise exception 'bad_address';
+  end if;
+
+  insert into public.orders (
+    user_id, location_id, status, total,
+    delivery_address, phone, comment, payment_method
+  )
+  values (
+    auth.uid(), p_location_id, 'new', 0,
+    btrim(p_delivery_address), btrim(p_phone),
+    nullif(btrim(coalesce(p_comment, '')), ''), p_payment_method
+  )
+  returning id into v_order_id;
+
+  for v_item in
+    select mi.id, mi.name, mi.price, (e->>'qty')::int as qty
+    from jsonb_array_elements(p_items) e
+    join public.menu_items mi on mi.id = (e->>'id')::uuid
+    where mi.is_available = true and (e->>'qty')::int > 0
+  loop
+    v_qty := least(greatest(v_item.qty, 1), 99);
+    insert into public.order_items (order_id, menu_item_id, name, price, qty)
+    values (v_order_id, v_item.id, v_item.name, v_item.price, v_qty);
+    v_total := v_total + v_item.price * v_qty;
+  end loop;
+
+  if v_total = 0 then
+    raise exception 'no_items';
+  end if;
+
+  update public.orders set total = v_total where id = v_order_id;
+  return v_order_id;
+end;
+$$;

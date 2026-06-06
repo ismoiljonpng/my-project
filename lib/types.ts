@@ -146,6 +146,7 @@ type TableConfig<Row, Insert, Update> = {
   Row: Row;
   Insert: Insert;
   Update: Update;
+  Relationships: [];
 };
 
 export type Database = {
@@ -210,6 +211,17 @@ export type Database = {
     Functions: {
       user_role: { Args: Record<string, never>; Returns: string };
       user_location_id: { Args: Record<string, never>; Returns: string };
+      place_order: {
+        Args: {
+          p_location_id: string;
+          p_delivery_address: string;
+          p_phone: string;
+          p_comment: string | null;
+          p_payment_method: string;
+          p_items: { id: string; qty: number }[];
+        };
+        Returns: string;
+      };
     };
     Enums: Record<string, never>;
   };
